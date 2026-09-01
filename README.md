@@ -23,6 +23,14 @@ are in [REGISTRATION.md](REGISTRATION.md#what-a-verifier-does-with-these-files).
 unregistered `protectmcp:*` type is a non-conformance, an unregistered third-party namespace is
 reported but not failed, and a wrong scope tag is a non-conformance.
 
+## Licensing
+
+Apache License 2.0 — see [LICENSE](LICENSE). Deliberately permissive: every conformant verifier
+has to vendor these files, so a registry nobody can lawfully embed would make the format one that
+only Asqav can implement. Same reasoning, and the same licence, as the conformance vectors in
+`asqav-sdk`. The SDK implementation itself stays under the Elastic License 2.0 — that is a product;
+this is a reference, and contains no implementation.
+
 ## Stability
 
 This URL is intended not to move. The registries are versioned; entries are added, and existing
