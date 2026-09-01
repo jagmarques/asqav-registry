@@ -1,6 +1,6 @@
 {
   "$schema": "./type-namespaces.schema.json",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "updated": "2026-09-01",
   "registration_process": "https://github.com/jagmarques/asqav-registry/blob/main/REGISTRATION.md",
   "note": "Administered by Asqav, not IANA. RFC 8726 bars an Independent Submission from creating an IANA registry, so the defining document keeps these as normative tables and points here for administration. Transfer to IANA under Specification Required is expected if the document is progressed on the IETF Stream.",
