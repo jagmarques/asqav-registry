@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jagmarques/asqav-registry/blob/main/registry/extension-fields.schema.json",
+  "title": "Compliance Receipt Extension Fields Registry",
+  "type": "object",
+  "required": ["version", "updated", "registry", "entries"],
+  "additionalProperties": true,
+  "properties": {
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "Registry version. A verifier reports this so a disagreement between two verifiers can be traced to a registry skew rather than a receipt."
+    },
+    "updated": {"type": "string", "format": "date"},
+    "registry": {"const": "Compliance Receipt Extension Fields"},
+    "registration_process": {"type": "string", "format": "uri"},
+    "note": {"type": "string"},
+    "entries": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/entry"}
+    }
+  },
+  "$defs": {
+    "entry": {
+      "type": "object",
+      "required": ["field_name", "scope", "description", "reference", "change_controller"],
+      "additionalProperties": false,
+      "properties": {
+        "field_name": {
+          "type": "string",
+          "pattern": "^[a-z0-9_]+$",
+          "description": "A JSON object key: lowercase ASCII letters, digits and underscore."
+        },
+        "scope": {
+          "enum": ["signed-payload", "envelope-level", "signing-time declaration"],
+          "description": "Which surface the field lives on. A registered name carrying the wrong scope tag is a non-conformance, because a verifier that treats an envelope field as signed would report unsigned data as covered."
+        },
+        "scope_note": {"type": "string"},
+        "description": {"type": "string", "minLength": 1},
+        "reference": {"type": "string", "minLength": 1},
+        "vocabulary": {
+          "type": "string",
+          "description": "URL or registry pointer for the controlled vocabulary values are drawn from, or free-form if none."
+        },
+        "change_controller": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}
