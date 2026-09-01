@@ -1,0 +1,379 @@
+{
+  "$schema": "./extension-fields.schema.json",
+  "version": "1.0.0",
+  "updated": "2026-09-01",
+  "registration_process": "https://github.com/jagmarques/asqav-registry/blob/main/REGISTRATION.md",
+  "note": "Administered by Asqav, not IANA. RFC 8726 bars an Independent Submission from creating an IANA registry, so the defining document keeps these as normative tables and points here for administration. Transfer to IANA under Specification Required is expected if the document is progressed on the IETF Stream.",
+  "registry": "Compliance Receipt Extension Fields",
+  "entries": [
+    {
+      "field_name": "risk_class",
+      "scope": "signed-payload",
+      "description": "Risk classification term under the Deployer's risk management documentation; defined in [extension-fields]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Vocabulary referenced in Audit Pack metadata",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "incident_class",
+      "scope": "signed-payload",
+      "description": "Incident classification term spanning DORA Article 18(1) (with further specification in [REG-2024-1772] and the canonical reporting enumeration of Annex II field 3.23 of [REG-2025-302]), 23 NYCRR 500.1 Cybersecurity Event/Incident, [CIRCIA] Covered Cyber Incident, and HIPAA security incident under 45 CFR 164.304; defined in [extension-fields]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Audit Pack metadata",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "counterparty_binding",
+      "scope": "signed-payload",
+      "description": "Signed-payload object carrying a base64-encoded SHA-256 digest (envelope_hash) of a peer agent's full signed envelope including signature bytes, a resolvable opaque locator (receipt_ref), an optional expected-acknowledger identifier (expect_ack_from), and an optional operational transport_label; see [counterparty-binding] for the full member set and the digest-scope rule",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Member vocabulary defined in [counterparty-binding-wire]; digest algorithm is SHA-256 per [ACTA-RECEIPTS] with base64 encoding per [RFC4648]",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "result_digest",
+      "scope": "signed-payload",
+      "description": "Object of the upstream payload_digest shape (hash, size, optional preview) carrying a SHA-256 digest of the downstream Action's result body; defined in [result-bound]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Digest algorithm is SHA-256 with hex encoding under the sha256:&lt;64 hex&gt; form",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "expires_at",
+      "scope": "signed-payload",
+      "description": "ISO 8601 timestamp with explicit timezone declaring the wall-clock time after which the producing system considers the decision result stale and not safe to replay; declared, not enforced, against the receipt itself (the receipt record never expires); defined in [result-bound]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Free-form ISO 8601 string",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "nonce",
+      "scope": "signed-payload",
+      "description": "Producer-generated string unique across the producer's emission stream for the lifetime of kid; defined in [result-bound]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Any unique string; the lowercase hexadecimal encoding of 12 random bytes (24 hexadecimal characters) is the recommended form",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "hash_algo",
+      "scope": "signed-payload",
+      "description": "Member of the payload recording how the receipt's context digest was produced; sha256 denotes an unkeyed SHA-256 digest and hmac-sha256 an HMAC-SHA256 keyed digest under a holder salt; the digest string keeps the sha256:&lt;64 hex&gt; wire form in both cases; defined in [verdict-vocabulary]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Value vocabulary {sha256, hmac-sha256} per [verdict-vocabulary]",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "tool_fingerprint",
+      "scope": "signed-payload",
+      "description": "JSON string of 32 lowercase hex characters carrying the truncated (first 128 bits) SHA-256 digest of the JCS-canonical ([RFC8785]) serialization of the JSON object {\"tool_name\": &lt;tool name&gt;, \"schema\": &lt;declared input schema&gt;}; defined in [result-bound]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Digest algorithm is SHA-256 over [RFC8785] canonical bytes, truncated to its first 32 hexadecimal characters",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "config_manifest_digest",
+      "scope": "signed-payload",
+      "description": "JSON string formatted sha256:&lt;64 hex&gt; over the canonical bytes of the producer's configuration manifest in effect at signing time; defined in [result-bound]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Manifest content is operator-defined; canonicalization rule is operator-declared in the Audit Pack manifest entry",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "cve_inventory_digest",
+      "scope": "signed-payload",
+      "description": "JSON string formatted sha256:&lt;64 hex&gt; over the canonical bytes of the producer's CVE inventory at signing time; defined in [result-bound]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Inventory content lists CVE identifiers per the producer's accepted-residual rationale",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "executable_hash",
+      "scope": "signed-payload",
+      "description": "JSON string formatted sha256:&lt;64 hex&gt; over the canonical bytes of the executable that invoked the Action (OCI image manifest digest for container producers, on-disk SHA-256 for non-container executables); defined in [build-provenance]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Digest algorithm is SHA-256",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "sbom_digest",
+      "scope": "signed-payload",
+      "description": "JSON string formatted sha256:&lt;64 hex&gt; over the canonical bytes of the CycloneDX or SPDX SBOM document covering the executing image; defined in [build-provenance]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "SBOM format and version declared in the Audit Pack manifest entry",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "slsa_provenance_pointer",
+      "scope": "signed-payload",
+      "description": "JSON string carrying an https URL resolving to the SLSA provenance attestation envelope for the build of the executable identified by executable_hash; defined in [build-provenance]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Target should be the SLSA Provenance v1.0 in-toto statement form",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "supply_chain_pointer",
+      "scope": "signed-payload",
+      "description": "JSON string carrying an https URL resolving to a transparency-log entry (in-toto, Sigstore, or Rekor) covering the build of the executable identified by executable_hash; defined in [build-provenance]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Verifier acceptance is recommended across the three log formats",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "anchors",
+      "scope": "envelope-level",
+      "description": "Envelope-level array of timestamping anchors covering the signed envelope; entries carry a required type discriminator (rfc3161 or opentimestamps; transparency-log pointers are not anchor types) and a required value field, plus optional informational members status (anchored / pending / failed) and anchor_block_hash (string Bitcoin block hash for upgraded OpenTimestamps entries); full schema is defined in [anchoring]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Anchor type vocabulary: rfc3161 per [RFC3161], opentimestamps per [OPENTIMESTAMPS]",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "witness_policy",
+      "scope": "signing-time declaration",
+      "scope_note": "not a wire member",
+      "description": "Declaration the producer gives the issuing platform with the signing request, declaring an N-of-M durable-anchoring quorum over the receipt's anchors array; carries a required integer required in the closed range [1, length of witnesses] and a required non-empty array witnesses whose distinct values are a subset of {rfc3161, opentimestamps} (Rekor and other transparency-log pointers are not witness types and are rejected). The receipt reaches the quorum-met state only when at least required distinct witness types each hold a verifiable inclusion proof; a producer must not assert durable anchoring unless that holds, per the false-attestation rule of [anchoring]; defined in [anchoring]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Witness type vocabulary: rfc3161 per [RFC3161], opentimestamps per [OPENTIMESTAMPS]; inclusion-proof prior art per [RFC9943] and [RFC9162]",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "mitre_techniques",
+      "scope": "signed-payload",
+      "description": "JSON array of MITRE ATT&amp;CK technique identifiers (for example T1059, T1078) self-declared by the producer; not verifier-checked by the issuing platform; flips framework_mappings_self_declared to true when populated; defined in [threat-framework]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Vocabulary referenced by id from the MITRE ATT&amp;CK enterprise matrix",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "mitre_atlas",
+      "scope": "signed-payload",
+      "description": "JSON array of MITRE ATLAS identifiers (for example AML.T0051) covering AI-system-specific adversary techniques; self-declared; flips framework_mappings_self_declared to true when populated; defined in [threat-framework]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Vocabulary referenced by id from the MITRE ATLAS catalogue",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "owasp_llm_top10",
+      "scope": "signed-payload",
+      "description": "JSON array of OWASP Top 10 for LLM Applications identifiers (for example LLM01, LLM02); self-declared; flips framework_mappings_self_declared to true when populated; defined in [threat-framework]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Vocabulary referenced by id from the OWASP Top 10 for LLM Applications publication",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "nist_ai_rmf",
+      "scope": "signed-payload",
+      "description": "JSON array of NIST AI Risk Management Framework function identifiers and subcategories (for example GOVERN-1.1, MEASURE-2.7); self-declared; flips framework_mappings_self_declared to true when populated; defined in [threat-framework]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Vocabulary referenced from NIST AI RMF 1.0",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "iso_42001",
+      "scope": "signed-payload",
+      "description": "JSON array of ISO/IEC 42001:2023 control identifiers (for example A.6.2.6); self-declared; flips framework_mappings_self_declared to true when populated; defined in [threat-framework]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Vocabulary referenced from ISO/IEC 42001:2023",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "eu_ai_act_articles",
+      "scope": "signed-payload",
+      "description": "JSON array of EU AI Act article identifiers (for example Article-12, Article-15); self-declared; flips framework_mappings_self_declared to true when populated; defined in [threat-framework]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Vocabulary referenced from [EU-AI-ACT]",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "rfc3161_timestamp",
+      "scope": "signed-payload",
+      "description": "JSON string carrying a base64-encoded RFC 3161 TimeStampResp (DER) supplied by the producer at signing time and preserved verbatim on the receipt for offline TSA chain verification independent of any platform-issued anchors; payload entry is an opaque caller-supplied token, not the per-receipt anchor produced by the platform; defined in [threat-framework]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Bytes are an RFC 3161 TimeStampResp per [RFC3161]; base64 encoding per [RFC4648]",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "framework_mappings_self_declared",
+      "scope": "signed-payload",
+      "description": "JSON boolean false-attestation guard set by the issuing platform to true whenever any of mitre_techniques, mitre_atlas, owasp_llm_top10, nist_ai_rmf, iso_42001, or eu_ai_act_articles is populated; a producer-supplied value of false alongside a populated taxonomy field is overridden by the issuing platform; defined in [threat-framework]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Boolean",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "authorized_under_mandate",
+      "scope": "signed-payload",
+      "description": "Server-built object recording a self-declared authorizing mandate the Action was signed under; carries required mandate_id, required issuer_id, a required scope_digest formatted sha256:&lt;64 hex&gt; over the mandate's authorized-action-types scope, and a required verified boolean whose only conformant value is true, asserting self-declared issuer authority (the same trust level as framework_mappings_self_declared, never issuing-platform-verified third-party authorization); a present-but-malformed object, including one carrying verified=false, is rejected at signing time by the false_mandate_attestation_guard; defined in [enforcement-attestation]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Member vocabulary defined in [enforcement-attestation]; scope_digest digest algorithm is SHA-256",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "controls_evaluated",
+      "scope": "signed-payload",
+      "description": "Server-built object enumerating the enforcement controls that genuinely fired on this sign plus the allow result; member keys are a closed set (emergency_halt, delegation_scope, quorum, mandate, policy, content_scan, result) and an unknown key is rejected; a key is present only when its control ran (omission-over-false attestation), quorum requires fired=true plus a 64-hex attestation_hash, and a policy member asserting evaluation requires matched_count at least 1; a caller-supplied value is dropped before signing (the false_control_attestation_guard); defined in [enforcement-attestation]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Control-key vocabulary defined in [enforcement-attestation]",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "approver_id",
+      "scope": "signed-payload",
+      "description": "Producer-asserted identity (bare kid or issuer_id) that authored a risk acceptance on a protectmcp:lifecycle:risk_acceptance receipt; a FIELD bound into the signed bytes with NO authority check, NO authentication, and NO identity resolution performed by the issuing platform, only the compliance_mode string-equality refusal against initiator_id (the risk_acceptance_self_approval_guard); required on the receipt type and enforced by the risk_acceptance_missing_required_field false-attestation guard; defined in [risk-acceptance]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Bare-identifier form per [issuer-id]",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "initiator_id",
+      "scope": "signed-payload",
+      "description": "Producer-asserted identity (bare kid or issuer_id) that requested the acceptance; a FIELD bound into the signed bytes; under compliance_mode a value that string-equals approver_id is refused at signing time by the risk_acceptance_self_approval_guard (a string-incoherence check, not identity resolution; an absent field never fires it); defined in [risk-acceptance]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Bare-identifier form per [issuer-id]",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "acceptance_reason",
+      "scope": "signed-payload",
+      "description": "Free-text producer rationale for accepting a risk; proves the rationale existed and was key-authored at issued_at, never parsed or scored; required on the risk-acceptance receipt type and enforced by the risk_acceptance_missing_required_field guard; defined in [risk-acceptance]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Free-form string",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "accepted_at",
+      "scope": "signed-payload",
+      "description": "Producer-asserted ISO 8601 authoring time of the acceptance; self-declared, distinct from the platform-attested issued_at and anchors times; defined in [risk-acceptance]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Free-form ISO 8601 string",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "supersedes",
+      "scope": "signed-payload",
+      "description": "Producer-asserted pointer (opaque receipt locator OR sha256:&lt;64 hex&gt;) to the prior risk-acceptance receipt this one replaces; proves the supersession claim existed at issued_at; the issuing platform NEVER invalidates the prior receipt (the chain of [hash-chain] is immutable, this is a forward pointer only); defined in [risk-acceptance]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Opaque locator or sha256:&lt;64 hex&gt; digest",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "sarif_digest",
+      "scope": "signed-payload",
+      "description": "JSON string formatted sha256:&lt;64 hex&gt; over the producer-declared canonical bytes of the SARIF scan artifact the acceptance rested on; a SHAPE-ONLY existence proof that THAT artifact existed unaltered at issued_at and nothing more; the issuing platform NEVER parses, fetches, re-runs, or validates the scan; defined in [risk-acceptance]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Digest algorithm is SHA-256; canonicalization rule declared in the Audit Pack manifest entry",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "finding_ref",
+      "scope": "signed-payload",
+      "description": "Producer-asserted opaque free-text pointer to a finding or rule id inside the SARIF artifact; proves the reference existed at issued_at, never resolved or validated; defined in [risk-acceptance]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Free-form string",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "approval_ref",
+      "scope": "signed-payload",
+      "description": "Producer-asserted opaque free-text correlation pointer to a human-in-the-loop approval id or external ticket; proves the pointer existed at issued_at, never resolved or validated; defined in [risk-acceptance]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Free-form string",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "risk_snapshot",
+      "scope": "signed-payload",
+      "description": "Object carrying a producer-asserted point-in-time snapshot of THIRD-PARTY risk signals (snapshot_at, snapshot_source, optional epss, cvss, cvss_vector, kev_listed, cve_ids); the issuing platform does NOT fetch, compute, verify, query, or vouch for these values, and the snapshot is explicitly NOT reproducible from any input the platform holds; numerics are strings (floats prohibited per [canonicalization-scope]) and snapshot_source is required whenever any of epss, cvss, cvss_vector, or kev_listed is populated (a populated signal without it is rejected at signing time by the risk_snapshot_numeric_requires_snapshot_source guard) so a value can never be read as a platform-derived or verified score; defined in [risk-acceptance]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Third-party feed vocabulary named per-receipt in snapshot_source; the platform defines no controlled vocabulary for the signal values",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "repo_ref",
+      "scope": "signed-payload",
+      "description": "Producer-asserted opaque pointer to the repository a change was authored against, carried on a protectmcp:lifecycle:code_authorship receipt; required on the receipt type and enforced by the code_authorship_missing_required_field false-attestation guard; free-text, proves the reference existed at issued_at, never resolved, cloned, or validated by the issuing platform; defined in [code-authorship]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Free-form string",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "commit_sha",
+      "scope": "signed-payload",
+      "description": "Producer-asserted commit identifier of the authored change; required on the receipt type and enforced by the code_authorship_missing_required_field false-attestation guard; bound into the signed bytes only, NEVER fetched or verified by the issuing platform, proves only that the producer asserted it at issued_at; defined in [code-authorship]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Free-form string",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "base_sha",
+      "scope": "signed-payload",
+      "description": "Producer-asserted base commit identifier the change was authored on top of; bound into the signed bytes only, NEVER fetched or verified by the issuing platform; defined in [code-authorship]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Free-form string",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "change_digest",
+      "scope": "signed-payload",
+      "description": "JSON string formatted sha256:&lt;64 hex&gt; over the producer-declared canonical bytes of the change; a SHAPE-ONLY existence proof that THAT change existed unaltered at issued_at and nothing more; the issuing platform NEVER fetches, re-diffs, or re-computes the change; a value outside the sha256:&lt;64 hex&gt; wire form is rejected at signing time by the change_digest_not_sha256_wire_form guard; defined in [code-authorship]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Digest algorithm is SHA-256; canonicalization rule declared in the Audit Pack manifest entry",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "change_ref",
+      "scope": "signed-payload",
+      "description": "Producer-asserted opaque free-text pointer to the change as a unit (for example a pull-request id); proves the reference existed at issued_at, never resolved or validated; defined in [code-authorship]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Free-form string",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "change_approval_ref",
+      "scope": "signed-payload",
+      "description": "Producer-asserted opaque free-text correlation pointer to a human-in-the-loop approval id or external review ticket for the change; proves the pointer existed at issued_at, never resolved or validated; defined in [code-authorship]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Free-form string",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "change_class",
+      "scope": "signed-payload",
+      "description": "Producer-asserted class of the change drawn from the closed vocabulary read, write, delete, execute, deploy; self-declared, the issuing platform records but does NOT verify the change matches the class; a value outside the closed vocabulary is rejected at signing time as an out-of-vocabulary value; defined in [code-authorship]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Closed vocabulary {read, write, delete, execute, deploy}",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "authored_by",
+      "scope": "signed-payload",
+      "description": "Object carrying a producer-asserted description of the authoring agent (agent_id, model_id, model_version, tool, attestation_source); the issuing platform does NOT verify the named model; attestation_source is required whenever model_id or model_version is populated (a populated model field without it is rejected at signing time by the authored_by_model_requires_attestation_source guard) so a model claim can never be read as a platform-verified attestation; defined in [code-authorship]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Member vocabulary defined in [code-authorship]; the platform defines no controlled vocabulary for the member values",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "unsigned_gap",
+      "scope": "signed-payload",
+      "description": "Server-built object evidencing a signer outage that preceded this receipt: count (REQUIRED integer greater than or equal to 1, the number of Actions the issuer attempted to sign and could not while the signer was unavailable), from and to (REQUIRED ISO 8601 timestamps with explicit timezone bounding the outage, with from not later than to). Absent when no outage preceded the receipt. The member is populated by the issuing platform from its own signer-failure tally, never carried in the producer's signing request, and a caller-supplied value MUST be dropped before signing. It makes a gap in the Action stream evidenced rather than silent: the chain links only receipts that exist, so without this member an Action for which no receipt could be minted leaves no trace. A verifier MUST NOT read the member as an assertion that the unsigned Actions were policy-evaluated; defined in [unsigned-gap]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "count is a JSON integer; timestamps follow [ISO8601-2]",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "key_thumbprint",
+      "scope": "signed-payload",
+      "description": "Server-built JSON string formatted sha256:&lt;64 hex&gt; carrying the RFC 7638 JWK Thumbprint of the receipt's signing key, committing the receipt to the exact key material so a key substituted under the same identifier is detected at verification; a caller-supplied value is dropped before signing; verifiers recompute the thumbprint of the resolved key and report mismatch as non-conformant, while absence is the legacy case and not itself a failure; defined in [key-thumbprint]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Digest algorithm is SHA-256 over the RFC 7638 canonical JWK form per [RFC7638]",
+      "change_controller": "Asqav"
+    },
+    {
+      "field_name": "environment_attestation",
+      "scope": "signed-payload",
+      "description": "Normative-optional object carrying pre-action boolean world-state claims (claims) attested under a distinct environment key (attester_kid, attested_at, detached sig over the attestation object minus sig); informs the policy gate and the Audit Pack evidence list but never replaces the gate; a stale or unverifiable attestation is reported on its own axis; defined in [environment-attestation]",
+      "reference": "draft-marques-asqav-compliance-receipts",
+      "vocabulary": "Member vocabulary defined in [environment-attestation]; claim names are free-form booleans",
+      "change_controller": "Asqav"
+    }
+  ]
+}
