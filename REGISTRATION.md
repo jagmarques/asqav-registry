@@ -62,9 +62,31 @@ removed because the Independent Stream has no DE.
 
 **First come, first served within a namespace.**
 
-Third parties may register **only under their own top-level namespace**. The `protectmcp` namespace
-and every sub-namespace under it are **reserved to the defining document** and are not available
-for third-party registration.
+Third parties may register **only under their own top-level namespace**, against a stable public
+specification. The `protectmcp` namespace and every sub-namespace under it are **reserved to the
+defining document** and are not available for third-party registration.
+
+## Stability guarantee
+
+These promises exist so an implementer can start emitting `type` today without betting on what
+happens to this repository later.
+
+1. **An entry, once registered, is never removed and never renamed.** It may only be marked
+   deprecated, by setting `deprecated: true` on the entry with a `deprecated_note` saying why and
+   what replaces it. A name that a receipt already carries therefore always resolves. Deprecation
+   is a statement about new receipts, not a retraction: a verifier MUST keep validating existing
+   receipts that use a deprecated entry exactly as before it was deprecated.
+2. **Registration is not revocable for editorial reasons.** An entry is withdrawn only if its
+   change controller asks for it, and even then it is deprecated rather than deleted.
+3. **`protectmcp` and its sub-namespaces are reserved to the defining document.** No third-party
+   registration can take a name out from under a receipt already in the field.
+4. **If the defining document is later progressed on the IETF Stream and these registries transfer
+   to IANA, the entries registered at that time are submitted as the initial contents of the IANA
+   registries unchanged** — same names, same scope tags, same change controllers. Transfer is not
+   an occasion to renumber, re-scope or re-review what is already registered.
+
+The registry `version` moves whenever entries change, and verifiers report it, so a deprecation is
+visible as a version skew rather than as a silent difference between two verifiers.
 
 ## What a verifier does with these files
 

@@ -3,23 +3,48 @@
   "$id": "https://github.com/jagmarques/asqav-registry/blob/main/registry/type-namespaces.schema.json",
   "title": "Compliance Receipt Type Namespaces Registry",
   "type": "object",
-  "required": ["version", "updated", "registry", "entries"],
+  "required": [
+    "version",
+    "updated",
+    "registry",
+    "entries"
+  ],
   "additionalProperties": true,
   "properties": {
-    "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
-    "updated": {"type": "string", "format": "date"},
-    "registry": {"const": "Compliance Receipt Type Namespaces"},
-    "registration_process": {"type": "string", "format": "uri"},
-    "note": {"type": "string"},
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "updated": {
+      "type": "string",
+      "format": "date"
+    },
+    "registry": {
+      "const": "Compliance Receipt Type Namespaces"
+    },
+    "registration_process": {
+      "type": "string",
+      "format": "uri"
+    },
+    "note": {
+      "type": "string"
+    },
     "entries": {
       "type": "array",
-      "items": {"$ref": "#/$defs/entry"}
+      "items": {
+        "$ref": "#/$defs/entry"
+      }
     }
   },
   "$defs": {
     "entry": {
       "type": "object",
-      "required": ["namespace", "description", "reference", "change_controller"],
+      "required": [
+        "namespace",
+        "description",
+        "reference",
+        "change_controller"
+      ],
       "additionalProperties": false,
       "properties": {
         "namespace": {
@@ -27,9 +52,26 @@
           "pattern": "^[a-z0-9_-]+(:[a-z0-9_-]+)*$",
           "description": "A colon-separated identifier prefix used as a value of the type field. A namespace of the form parent:suffix is a sub-namespace and inherits its parent's change controller."
         },
-        "description": {"type": "string", "minLength": 1},
-        "reference": {"type": "string", "minLength": 1},
-        "change_controller": {"type": "string", "minLength": 1}
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reference": {
+          "type": "string",
+          "minLength": 1
+        },
+        "change_controller": {
+          "type": "string",
+          "minLength": 1
+        },
+        "deprecated": {
+          "type": "boolean",
+          "description": "True when the entry is retired. An entry is never removed or renamed once registered, so a name a receipt already carries always resolves; deprecation records that new receipts should stop using it."
+        },
+        "deprecated_note": {
+          "type": "string",
+          "description": "Why the entry was deprecated and what replaces it, if anything."
+        }
       }
     }
   }
