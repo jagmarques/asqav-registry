@@ -1,0 +1,29 @@
+name: validate-registry
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      # jsonschema is required, not optional: validate.py degrades to a NOTE when it is
+      # absent, and a registration PR must not pass on a skipped schema check.
+      - run: pip install jsonschema
+      - run: python3 validate.py
+      - name: Fail if the schema check was skipped
+        run: |
+          if python3 validate.py 2>&1 | grep -q "jsonschema not installed"; then
+            echo "schema validation was skipped; refusing to pass"
+            exit 1
+          fi

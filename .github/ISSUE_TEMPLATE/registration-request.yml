@@ -1,0 +1,75 @@
+name: Registration request
+description: Request an entry in the extension-fields or type-namespaces registry
+title: "[registration] "
+labels: ["registration"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please read [REGISTRATION.md](../blob/main/REGISTRATION.md) first.
+
+        Third parties may register only under **their own top-level namespace**. The
+        `protectmcp` namespace and its sub-namespaces are reserved to the defining document.
+  - type: dropdown
+    id: registry
+    attributes:
+      label: Which registry
+      options:
+        - Compliance Receipt Extension Fields
+        - Compliance Receipt Type Namespaces
+    validations:
+      required: true
+  - type: input
+    id: name
+    attributes:
+      label: Name
+      description: The field name (lowercase, digits, underscore) or the namespace.
+    validations:
+      required: true
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Scope tag (extension fields only)
+      description: >
+        Get this right. A verifier that reads an envelope-level field as though it were signed
+        would report unsigned data as covered by the signature.
+      options:
+        - signed-payload
+        - envelope-level
+        - signing-time declaration
+        - not applicable (type namespace request)
+    validations:
+      required: true
+  - type: input
+    id: spec
+    attributes:
+      label: Stable public specification URL
+      description: >
+        Must be dereferenceable without an account, and must not silently change content.
+    validations:
+      required: true
+  - type: input
+    id: vocabulary
+    attributes:
+      label: Vocabulary (extension fields)
+      description: URL or registry pointer for permitted values, or "free-form".
+  - type: input
+    id: parent
+    attributes:
+      label: Parent entry (sub-namespace requests only)
+      description: >
+        For a `parent:suffix` request, name the registered parent entry. The sub-namespace
+        inherits its parent's change controller.
+  - type: input
+    id: controller
+    attributes:
+      label: Change controller
+    validations:
+      required: true
+  - type: input
+    id: contact
+    attributes:
+      label: Contact
+      description: Who answers questions about this entry.
+    validations:
+      required: true
