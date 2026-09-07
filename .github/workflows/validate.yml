@@ -27,3 +27,7 @@ jobs:
             echo "schema validation was skipped; refusing to pass"
             exit 1
           fi
+      - name: Validate wire vocabulary reference
+        run: python3 vocabulary/validate.py
+      - name: Test wire vocabulary validation
+        run: python3 -m unittest discover -s tests -p 'test_wire_vocabulary.py'

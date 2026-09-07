@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "source_note": "Reference snapshot of public wire vocabulary; consumers apply their own validation policies.",
+  "receipt_types": [
+    "protectmcp:decision",
+    "protectmcp:restraint",
+    "protectmcp:lifecycle",
+    "protectmcp:lifecycle:configuration_change",
+    "protectmcp:lifecycle:risk_acceptance",
+    "protectmcp:lifecycle:code_authorship",
+    "protectmcp:acknowledgment",
+    "protectmcp:observation",
+    "protectmcp:observation:result_bound"
+  ],
+  "request_extra_types": [
+    "authoritative"
+  ],
+  "decisions": [
+    "allow",
+    "deny",
+    "rate_limit",
+    "observation"
+  ],
+  "policy_decisions": [
+    "permit",
+    "deny",
+    "rate_limit",
+    "none"
+  ],
+  "decision_map": [
+    [
+      "permit",
+      "allow"
+    ],
+    [
+      "allow",
+      "allow"
+    ],
+    [
+      "deny",
+      "deny"
+    ],
+    [
+      "rate_limit",
+      "rate_limit"
+    ],
+    [
+      "none",
+      "observation"
+    ]
+  ],
+  "capture_topologies": [
+    "in_process_sdk",
+    "network_proxy",
+    "browser_extension",
+    "mcp_proxy",
+    "passive_telemetry",
+    "github_sha_pull"
+  ],
+  "sandbox_states": [
+    "enabled",
+    "disabled",
+    "unavailable"
+  ],
+  "witnesses": [
+    "rfc3161",
+    "opentimestamps"
+  ],
+  "taxonomy_order": [
+    "mitre_techniques",
+    "mitre_atlas",
+    "owasp_llm_top10",
+    "nist_ai_rmf",
+    "iso_42001",
+    "eu_ai_act_articles"
+  ],
+  "fields": {
+    "mitre_techniques": {
+      "typescript_option": "mitreTechniques",
+      "form": "list of MITRE ATT&CK technique ids",
+      "description": {
+        "wire": "Caller-supplied list of MITRE ATT&CK technique ids (e.g. T1059, T1078). Self-declared; auto-flips framework_mappings_self_declared to True. Never Asqav-verified."
+      },
+      "list_entry_max_length": 128
+    },
+    "mitre_atlas": {
+      "typescript_option": "mitreAtlas",
+      "form": "list of MITRE ATLAS ids",
+      "description": {
+        "wire": "Caller-supplied list of MITRE ATLAS ids for AI-system threats (e.g. AML.T0051). Self-declared; auto-flips framework_mappings_self_declared to True. Never Asqav-verified."
+      },
+      "list_entry_max_length": 128
+    },
+    "owasp_llm_top10": {
+      "typescript_option": "owaspLlmTop10",
+      "form": "list of OWASP Top 10 for LLM ids",
+      "description": {
+        "wire": "Caller-supplied list of OWASP Top 10 for LLM ids (e.g. LLM01, LLM02). Self-declared; auto-flips framework_mappings_self_declared to True. Never Asqav-verified."
+      },
+      "list_entry_max_length": 128
+    },
+    "nist_ai_rmf": {
+      "typescript_option": "nistAiRmf",
+      "form": "list of NIST AI RMF function ids",
+      "description": {
+        "wire": "Caller-supplied list of NIST AI RMF function ids (GOVERN | MAP | MEASURE | MANAGE plus subcategories). Self-declared; auto-flips framework_mappings_self_declared to True."
+      },
+      "list_entry_max_length": 128
+    },
+    "iso_42001": {
+      "typescript_option": "iso42001",
+      "form": "list of ISO/IEC 42001 control ids",
+      "description": {
+        "wire": "Caller-supplied list of ISO/IEC 42001 control ids (e.g. A.6.2.6). Self-declared; auto-flips framework_mappings_self_declared to True. Never Asqav-verified."
+      },
+      "list_entry_max_length": 128
+    },
+    "eu_ai_act_articles": {
+      "typescript_option": "euAiActArticles",
+      "form": "list of EU AI Act article ids",
+      "description": {
+        "wire": "Caller-supplied list of EU AI Act article ids (e.g. Article-12, Article-15, Article-50). Self-declared; auto-flips framework_mappings_self_declared to True. Never Asqav-verified."
+      },
+      "list_entry_max_length": 128
+    }
+  },
+  "profiles": {
+    "receipt_profile": [
+      "receipt_types"
+    ],
+    "receipt_request": [
+      "receipt_types",
+      "request_extra_types"
+    ]
+  }
+}
