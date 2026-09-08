@@ -6,10 +6,12 @@
   "required": [
     "schema_version", "source_note", "receipt_types", "request_extra_types",
     "decisions", "policy_decisions", "decision_map", "capture_topologies",
-    "sandbox_states", "witnesses", "taxonomy_order", "fields", "profiles"
+    "sandbox_states", "witnesses", "taxonomy_order", "fields", "profiles",
+    "metadata_order", "metadata", "standard_risk_classes",
+    "dora_incident_classes", "hipaa_incident_classes"
   ],
   "properties": {
-    "schema_version": {"type": "integer", "const": 1},
+    "schema_version": {"type": "integer", "const": 2},
     "source_note": {"$ref": "#/$defs/text"},
     "receipt_types": {"$ref": "#/$defs/tokens"},
     "request_extra_types": {"$ref": "#/$defs/tokens"},
@@ -19,6 +21,28 @@
     "sandbox_states": {"$ref": "#/$defs/tokens"},
     "witnesses": {"$ref": "#/$defs/tokens"},
     "taxonomy_order": {"$ref": "#/$defs/tokens"},
+    "metadata_order": {"$ref": "#/$defs/tokens"},
+    "standard_risk_classes": {"$ref": "#/$defs/tokens"},
+    "dora_incident_classes": {"$ref": "#/$defs/tokens"},
+    "hipaa_incident_classes": {"$ref": "#/$defs/tokens"},
+    "metadata": {
+      "type": "object", "minProperties": 43, "maxProperties": 43,
+      "propertyNames": {"enum": [
+        "result_digest", "expires_at", "nonce", "tool_fingerprint",
+        "config_manifest_digest", "cve_inventory_digest", "executable_hash",
+        "sbom_digest", "slsa_provenance_pointer", "supply_chain_pointer",
+        "mitre_techniques", "mitre_atlas", "owasp_llm_top10", "nist_ai_rmf",
+        "iso_42001", "eu_ai_act_articles", "rfc3161_timestamp",
+        "framework_mappings_self_declared", "witness_policy", "risk_class",
+        "incident_class", "authorized_under_mandate", "controls_evaluated",
+        "approver_id", "initiator_id", "acceptance_reason", "accepted_at",
+        "supersedes", "sarif_digest", "finding_ref", "approval_ref", "invocation_ref",
+        "risk_snapshot", "repo_ref", "commit_sha", "base_sha", "change_digest",
+        "change_ref", "change_approval_ref", "change_class", "authored_by",
+        "user_intent", "user_intent_verified"
+      ]},
+      "additionalProperties": {"$ref": "#/$defs/metadata"}
+    },
     "decision_map": {
       "type": "array", "minItems": 1, "uniqueItems": true,
       "items": {
@@ -33,10 +57,11 @@
     },
     "profiles": {
       "type": "object", "additionalProperties": false,
-      "required": ["receipt_profile", "receipt_request"],
+      "required": ["receipt_profile", "receipt_request", "sdk_incident"],
       "properties": {
         "receipt_profile": {"$ref": "#/$defs/tokens"},
-        "receipt_request": {"$ref": "#/$defs/tokens"}
+        "receipt_request": {"$ref": "#/$defs/tokens"},
+        "sdk_incident": {"$ref": "#/$defs/tokens"}
       }
     }
   },
@@ -47,18 +72,22 @@
       "type": "array", "minItems": 1, "uniqueItems": true,
       "items": {"$ref": "#/$defs/token"}
     },
+    "metadata": {
+      "type": "object", "additionalProperties": false,
+      "required": ["form", "description"],
+      "properties": {
+        "form": {"$ref": "#/$defs/text"},
+        "description": {"$ref": "#/$defs/text"}
+      }
+    },
     "taxonomy": {
       "type": "object", "additionalProperties": false,
-      "required": ["typescript_option", "form", "description", "list_entry_max_length"],
+      "required": ["typescript_option", "metadata_ref", "list_entry_max_length"],
       "properties": {
         "typescript_option": {
           "type": "string", "pattern": "^[a-z][a-zA-Z0-9]*$", "not": {"pattern": "\\s"}
         },
-        "form": {"$ref": "#/$defs/text"},
-        "description": {
-          "type": "object", "additionalProperties": false,
-          "required": ["wire"], "properties": {"wire": {"$ref": "#/$defs/text"}}
-        },
+        "metadata_ref": {"$ref": "#/$defs/token"},
         "list_entry_max_length": {"type": "integer", "minimum": 1}
       }
     }
