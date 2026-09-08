@@ -3,6 +3,7 @@
 import builtins
 import contextlib
 import copy
+import hashlib
 import importlib.util
 import io
 import json
@@ -68,7 +69,7 @@ class ReferenceValidation(unittest.TestCase):
         for value in [None, [], "", 1, True]:
             with self.subTest(value=value):
                 self.rejects(value, "not of type 'object'")
-        for value in [None, 0, 2, "1", True]:
+        for value in [None, 0, 1, "2", True]:
             with self.subTest(version=value):
                 self.rejects(dict(self.document, schema_version=value), "schema_version")
 
@@ -111,8 +112,8 @@ class ReferenceValidation(unittest.TestCase):
     def test_taxonomy_metadata_has_typed_nonempty_values(self):
         for key, bad in [
             ("typescript_option", "bad_name"), ("typescript_option", "name\n"),
-            ("form", "   "), ("description", {"wire": ""}),
-            ("description", {"wire": "text", "orm": "private"}),
+            ("metadata_ref", "bad_name\n"), ("metadata_ref", {}),
+            ("form", "old embedded form"), ("description", {"wire": "text", "orm": "private"}),
             ("list_entry_max_length", 0), ("list_entry_max_length", "128"),
             ("list_entry_max_length", True),
         ]:
@@ -120,6 +121,87 @@ class ReferenceValidation(unittest.TestCase):
                 changed = copy.deepcopy(self.document)
                 changed["fields"]["mitre_atlas"][key] = bad
                 self.rejects(changed, key)
+
+    def test_metadata_preserves_exact_public_snapshot_and_order(self):
+        expected = [
+            "result_digest", "expires_at", "nonce", "tool_fingerprint", "config_manifest_digest",
+            "cve_inventory_digest", "executable_hash", "sbom_digest", "slsa_provenance_pointer",
+            "supply_chain_pointer", "mitre_techniques", "mitre_atlas", "owasp_llm_top10", "nist_ai_rmf",
+            "iso_42001", "eu_ai_act_articles", "rfc3161_timestamp", "framework_mappings_self_declared",
+            "witness_policy", "risk_class", "incident_class", "authorized_under_mandate", "controls_evaluated",
+            "approver_id", "initiator_id", "acceptance_reason", "accepted_at", "supersedes", "sarif_digest",
+            "finding_ref", "approval_ref", "invocation_ref", "risk_snapshot", "repo_ref", "commit_sha",
+            "base_sha", "change_digest", "change_ref", "change_approval_ref", "change_class", "authored_by",
+            "user_intent", "user_intent_verified",
+        ]
+        self.assertEqual(self.document["metadata_order"], expected)
+        self.assertEqual(list(self.document["metadata"]), expected)
+        raw = json.dumps(self.document["metadata"], ensure_ascii=False, separators=(",", ":")).encode()
+        self.assertEqual(hashlib.sha256(raw).hexdigest(), "333b4d4bc30e9a0c9a57067208da142ff75bccf4ec31fd34cada3be6041ce9a2")
+        for name, field in self.document["fields"].items():
+            self.assertEqual(field["metadata_ref"], name)
+            self.assertEqual(set(field), {"typescript_option", "metadata_ref", "list_entry_max_length"})
+
+    def test_standard_and_sdk_incident_groups_preserve_public_values(self):
+        self.assertEqual(self.document["standard_risk_classes"], ["low", "medium", "high", "unknown"])
+        self.assertEqual(self.document["dora_incident_classes"], [
+            "cybersecurity_related", "process_failure", "system_failure", "external_event", "payment_related", "other",
+        ])
+        self.assertEqual(self.document["hipaa_incident_classes"], ["hipaa_security_incident"])
+        self.assertEqual(self.document["profiles"]["sdk_incident"], ["dora_incident_classes", "hipaa_incident_classes"])
+        self.document["hipaa_incident_classes"] = ["other"]
+        self.rejects(self.document, "sdk_incident groups overlap")
+
+    def test_metadata_requires_exact_members_and_order(self):
+        for name in self.document["metadata"]:
+            with self.subTest(name=name):
+                changed = copy.deepcopy(self.document)
+                del changed["metadata"][name]
+                changed["metadata_order"].remove(name)
+                self.rejects(changed, "enough properties")
+        for bad in ["unknown", "private_source_path", "owasp_agentic_top10", "bad-name", "name\n"]:
+            changed = copy.deepcopy(self.document)
+            changed["metadata"][bad] = changed["metadata"].pop("nonce")
+            changed["metadata_order"] = list(changed["metadata"])
+            self.rejects(changed, "not one of")
+        for order in [self.document["metadata_order"][:-1], self.document["metadata_order"][::-1]]:
+            self.rejects(dict(self.document, metadata_order=order), "metadata_order must match")
+        changed = copy.deepcopy(self.document)
+        changed["metadata"] = dict(reversed(list(changed["metadata"].items())))
+        self.rejects(changed, "metadata_order must match")
+
+    def test_metadata_descriptors_are_closed_nonempty_strings(self):
+        for key in ["form", "description"]:
+            for value in [None, "", "   ", 128, True, [], {"wire": "public", "orm": "private"}]:
+                with self.subTest(key=key, value=value):
+                    changed = copy.deepcopy(self.document)
+                    changed["metadata"]["nonce"][key] = value
+                    self.rejects(changed, key)
+            changed = copy.deepcopy(self.document)
+            del changed["metadata"]["nonce"][key]
+            self.rejects(changed, "required property")
+        self.document["metadata"]["nonce"]["available"] = True
+        self.rejects(self.document, "Additional properties")
+
+    def test_taxonomy_metadata_reference_cannot_resolve_another_field(self):
+        for reference in ["unknown", "nonce", "mitre_atlas"]:
+            changed = copy.deepcopy(self.document)
+            changed["fields"]["mitre_techniques"]["metadata_ref"] = reference
+            self.rejects(changed, "metadata_ref must resolve to its own metadata")
+        self.document["fields"]["unknown"] = self.document["fields"].pop("mitre_atlas")
+        self.document["fields"]["unknown"]["metadata_ref"] = "unknown"
+        self.document["taxonomy_order"][1] = "unknown"
+        self.rejects(self.document, "metadata_ref must resolve to its own metadata")
+
+    def test_duplicate_metadata_json_members_are_rejected(self):
+        raw = json.dumps(self.document)
+        member = '"result_digest": {'
+        raw = raw.replace(member, '"result_digest": {"form": "hidden", "description": "hidden"}, ' + member)
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "duplicate.json"
+            path.write_text(raw)
+            with self.assertRaisesRegex(ValueError, "duplicate JSON member: result_digest"):
+                wire.load(path)
 
     def test_missing_schema_dependency_fails_clean(self):
         original = builtins.__import__
