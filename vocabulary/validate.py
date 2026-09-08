@@ -64,10 +64,13 @@ def check_profiles(document: dict[str, Any]) -> None:
     expected = {
         "receipt_profile": ["receipt_types"],
         "receipt_request": ["receipt_types", "request_extra_types"],
+        "sdk_incident": ["dora_incident_classes", "hipaa_incident_classes"],
     }
     for name, groups in document["profiles"].items():
         if groups != expected[name]:
             raise ValueError(f"profiles.{name} must reference {expected[name]}")
+    if set(document["dora_incident_classes"]) & set(document["hipaa_incident_classes"]):
+        raise ValueError("sdk_incident groups overlap")
 
 
 def check_taxonomies(document: dict[str, Any]) -> None:
@@ -76,6 +79,14 @@ def check_taxonomies(document: dict[str, Any]) -> None:
     options = [field["typescript_option"] for field in document["fields"].values()]
     if len(set(options)) != len(options):
         raise ValueError("fields have duplicate typescript_option names")
+    for name, field in document["fields"].items():
+        if field["metadata_ref"] != name or name not in document["metadata"]:
+            raise ValueError(f"fields.{name}.metadata_ref must resolve to its own metadata")
+
+
+def check_metadata(document: dict[str, Any]) -> None:
+    if document["metadata_order"] != list(document["metadata"]):
+        raise ValueError("metadata_order must match every metadata key in order")
 
 
 def validate(document: Any) -> None:
@@ -83,6 +94,7 @@ def validate(document: Any) -> None:
     check_decisions(document)
     check_profiles(document)
     check_taxonomies(document)
+    check_metadata(document)
 
 
 def main(argv: list[str] | None = None) -> int:
