@@ -17,9 +17,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
       # jsonschema is required, not optional: validate.py degrades to a NOTE when it is
       # absent, and a registration PR must not pass on a skipped schema check.
-      - run: pip install jsonschema
+      - run: pip install jsonschema==4.26.0
+      - run: npm ci --prefix tests/typescript-consumer
       - run: python3 validate.py
       - name: Fail if the schema check was skipped
         run: |
@@ -30,4 +34,8 @@ jobs:
       - name: Validate wire vocabulary reference
         run: python3 vocabulary/validate.py
       - name: Test wire vocabulary validation
-        run: python3 -m unittest discover -s tests -p 'test_wire_vocabulary.py'
+        run: python3 -m unittest discover -s tests -p 'test_wire*.py'
+      - name: Check generated wire vocabulary
+        run: python3 tools/wire_vocabulary.py --check
+      - name: Compile and run generated TypeScript
+        run: npm test --prefix tests/typescript-consumer

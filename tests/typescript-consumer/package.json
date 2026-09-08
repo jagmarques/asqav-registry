@@ -1,0 +1,7 @@
+{
+  "name": "wire-vocabulary-consumer-test",
+  "private": true,
+  "type": "module",
+  "scripts": {"test": "node roundtrip.mjs"},
+  "devDependencies": {"typescript": "5.9.3"}
+}
