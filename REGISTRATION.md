@@ -12,8 +12,11 @@ registry", and Section 5 states that the Independent Submissions Editor "will no
 so no new subregistry may use the Specification Required or Expert Review policies.
 
 The registries therefore stay as normative tables in the document, and are **administered here**
-under the process below. If the document is later progressed on the IETF Stream, transfer of both
-registries to IANA under Specification Required is expected.
+under the process below. Moving either table to IANA would take an explicit registration request
+under the applicable procedures and approvals, and progression of the document on the IETF Stream
+does not itself transfer them. Section 6 of [RFC 8726][rfc8726] covers transfer of control of an
+existing IANA registry between streams, and does not itself authorize moving tables that are
+administered outside IANA.
 
 Nothing here is pre-registered on anyone's behalf. Entries appear only after a request is made and
 reviewed.
@@ -34,8 +37,16 @@ reviewed.
 
 ## Registration review criteria
 
-These mirror the criteria the defining document states, with the Designated Expert language
-removed because the Independent Stream has no DE.
+These mirror the criteria the defining document states, applied by a maintainer through the process
+above. That review is not an IANA Designated Expert review and establishes no IANA registration
+policy. Two sections of [RFC 8726][rfc8726] set the basis, and they cover different actions.
+Section 5 covers a **new subregistry**: the Independent Submissions Editor "will not appoint a DE",
+so "no new subregistry can be created that uses the Specification Required or Expert Review
+policies". Section 2 covers allocations from a registry that **already exists**, where "all code
+point assignments are subject to the oversight of any designated expert (DE) appointed for the
+registry". The defining document's CWT claim request falls under Section 2 and stays subject to
+that registry's policy and its appointed experts, so Independent Stream status does not by itself
+put a registration outside DE review.
 
 **Both registries**
 
