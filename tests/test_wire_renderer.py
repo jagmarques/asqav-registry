@@ -53,7 +53,7 @@ class RendererTests(unittest.TestCase):
         self.assertEqual(literals["DECISION_MAP"], {
             "permit": "allow", "allow": "allow", "deny": "deny",
             "rate_limit": "rate_limit", "none": "observation"})
-        self.assertEqual(len(literals["RECEIPT_PROFILE"]), 9)
+        self.assertEqual(len(literals["RECEIPT_PROFILE"]), 10)
         self.assertEqual(literals["RECEIPT_REQUEST"], literals["RECEIPT_PROFILE"] + ("authoritative",))
         self.assertNotIn("authoritative", literals["RECEIPT_PROFILE"])
         self.assertEqual(len(literals["METADATA"]), 43)
