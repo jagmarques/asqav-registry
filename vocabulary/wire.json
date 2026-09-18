@@ -8,6 +8,7 @@
     "protectmcp:lifecycle:configuration_change",
     "protectmcp:lifecycle:risk_acceptance",
     "protectmcp:lifecycle:code_authorship",
+    "protectmcp:lifecycle:oversight_ruling",
     "protectmcp:acknowledgment",
     "protectmcp:observation",
     "protectmcp:observation:result_bound"

@@ -32,7 +32,7 @@ class ReferenceValidation(unittest.TestCase):
         wire.validate(self.document)
         namespaces = wire.load(ROOT / "registry/type-namespaces.json")
         self.assertEqual(set(self.document["receipt_types"]), {e["namespace"] for e in namespaces["entries"]})
-        self.assertEqual(len(self.document["receipt_types"]), 9)
+        self.assertEqual(len(self.document["receipt_types"]), 10)
         self.assertEqual(self.document["request_extra_types"], ["authoritative"])
         self.assertNotIn("allow", self.document["policy_decisions"])
         self.assertEqual(self.document["decision_map"], [
