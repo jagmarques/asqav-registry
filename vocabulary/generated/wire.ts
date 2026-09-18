@@ -6,6 +6,7 @@ export const RECEIPT_TYPES = [
   "protectmcp:lifecycle:configuration_change",
   "protectmcp:lifecycle:risk_acceptance",
   "protectmcp:lifecycle:code_authorship",
+  "protectmcp:lifecycle:oversight_ruling",
   "protectmcp:acknowledgment",
   "protectmcp:observation",
   "protectmcp:observation:result_bound"
@@ -76,6 +77,7 @@ export const RECEIPT_PROFILE = [
   "protectmcp:lifecycle:configuration_change",
   "protectmcp:lifecycle:risk_acceptance",
   "protectmcp:lifecycle:code_authorship",
+  "protectmcp:lifecycle:oversight_ruling",
   "protectmcp:acknowledgment",
   "protectmcp:observation",
   "protectmcp:observation:result_bound"
@@ -88,6 +90,7 @@ export const RECEIPT_REQUEST = [
   "protectmcp:lifecycle:configuration_change",
   "protectmcp:lifecycle:risk_acceptance",
   "protectmcp:lifecycle:code_authorship",
+  "protectmcp:lifecycle:oversight_ruling",
   "protectmcp:acknowledgment",
   "protectmcp:observation",
   "protectmcp:observation:result_bound",

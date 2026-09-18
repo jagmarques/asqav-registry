@@ -8,6 +8,7 @@
       "protectmcp:lifecycle:configuration_change",
       "protectmcp:lifecycle:risk_acceptance",
       "protectmcp:lifecycle:code_authorship",
+      "protectmcp:lifecycle:oversight_ruling",
       "protectmcp:acknowledgment",
       "protectmcp:observation",
       "protectmcp:observation:result_bound"
@@ -68,6 +69,7 @@
       "protectmcp:lifecycle:configuration_change",
       "protectmcp:lifecycle:risk_acceptance",
       "protectmcp:lifecycle:code_authorship",
+      "protectmcp:lifecycle:oversight_ruling",
       "protectmcp:acknowledgment",
       "protectmcp:observation",
       "protectmcp:observation:result_bound"
@@ -79,6 +81,7 @@
       "protectmcp:lifecycle:configuration_change",
       "protectmcp:lifecycle:risk_acceptance",
       "protectmcp:lifecycle:code_authorship",
+      "protectmcp:lifecycle:oversight_ruling",
       "protectmcp:acknowledgment",
       "protectmcp:observation",
       "protectmcp:observation:result_bound",
@@ -388,6 +391,11 @@
     },
     {
       "value": "protectmcp:lifecycle:code_authorship",
+      "receipt_profile": true,
+      "receipt_request": true
+    },
+    {
+      "value": "protectmcp:lifecycle:oversight_ruling",
       "receipt_profile": true,
       "receipt_request": true
     },

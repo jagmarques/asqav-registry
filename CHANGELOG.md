@@ -2,6 +2,12 @@
 
 Both registries version together.
 
+## [1.2.0] - 2026-09-18
+
+- **10 type namespaces**: registers `protectmcp:lifecycle:oversight_ruling`
+  (human ruling over previously recorded Actions, Section 5.13 path).
+  Extension fields unchanged at 47.
+
 ## [1.0.0] - 2026-09-01
 
 Initial contents, generated from Sections 12.1 and 12.2 of
@@ -25,8 +31,8 @@ initial contents, because the initial contents are exactly what the -09 registry
 
 - `seq` — the per-chain counter, shipped and emitting in production.
 - `beacon_ref` — the earliest-time bound.
-- `human_approval`, `owasp_agentic_top10`, and the
-  `protectmcp:lifecycle:oversight_ruling` sub-namespace and its fields.
+- `human_approval`, `owasp_agentic_top10`, and the oversight-ruling fields
+  (`judged_action_refs`, `ruling`, `reviewer`; namespace registered in 1.2.0).
 
 They are added when the draft sections that define them land, so the registry keeps tracking the
 document rather than running ahead of it.
