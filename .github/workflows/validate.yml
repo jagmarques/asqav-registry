@@ -25,6 +25,10 @@ jobs:
       - run: pip install jsonschema==4.26.0
       - run: npm ci --prefix tests/typescript-consumer
       - run: python3 validate.py
+      - name: Test registry backward-compatibility gate
+        run: python3 -m pytest tests/test_registry_compatibility.py -q
+      - name: Check registry digest manifest
+        run: shasum -a 256 -c registry/MANIFEST.sha256
       - name: Fail if the schema check was skipped
         run: |
           if python3 validate.py 2>&1 | grep -q "jsonschema not installed"; then
