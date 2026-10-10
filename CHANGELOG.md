@@ -2,6 +2,11 @@
 
 Both registries version together.
 
+## [1.1.0] - 2026-09-01
+
+- **47 extension fields** (was 46): registers `seq`, the per-chain
+  counter shipped and emitting in production.
+
 ## [1.0.0] - 2026-09-01
 
 Initial contents, generated from Sections 12.1 and 12.2 of
