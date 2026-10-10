@@ -22,7 +22,7 @@ jobs:
           node-version: "22"
       # jsonschema is required, not optional: validate.py degrades to a NOTE when it is
       # absent, and a registration PR must not pass on a skipped schema check.
-      - run: pip install jsonschema==4.26.0
+      - run: pip install jsonschema==4.26.0 pytest==8.4.2
       - run: npm ci --prefix tests/typescript-consumer
       - run: python3 validate.py
       - name: Test registry backward-compatibility gate
