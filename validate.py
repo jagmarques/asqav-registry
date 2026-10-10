@@ -80,6 +80,52 @@ def check_reserved_namespace_is_ours(doc: dict, errors: list[str]) -> None:
             )
 
 
+def _previous_snapshot() -> dict | None:
+    """Last-release entries; None skips the compat gate (no history yet)."""
+    path = REGISTRY / "previous.json"
+    if not path.exists():
+        return None
+    return json.loads(path.read_text())
+
+
+def check_compatibility(fields: dict, namespaces: dict, errors: list[str]) -> None:
+    """Every snapshotted field/namespace must survive with scope+controller.
+
+    A removal or rename is an error naming it; a `deprecated: true` flip is
+    allowed, as are description/reference edits and brand-new entries."""
+    prev = _previous_snapshot()
+    if prev is None:
+        return
+    current = {
+        "extension-fields.json": fields,
+        "type-namespaces.json": namespaces,
+    }
+    for name, key, attrs in (
+        ("extension-fields.json", "field_name", ("scope", "change_controller")),
+        ("type-namespaces.json", "namespace", ("change_controller",)),
+    ):
+        old = {e.get(key): e for e in prev.get(name, {}).get("entries", [])}
+        new = {e.get(key): e for e in current[name].get("entries", [])}
+        for k, oe in old.items():
+            ne = new.get(k)
+            if ne is None:
+                errors.append(f"compat: {name}: {key} {k!r} removed or renamed")
+                continue
+            for attr in attrs:
+                if oe.get(attr) != ne.get(attr):
+                    errors.append(
+                        f"compat: {name}: {k!r}: {attr} changed "
+                        f"{oe.get(attr)!r} -> {ne.get(attr)!r}"
+                    )
+
+
+def check_changelog_version(fields: dict, errors: list[str]) -> None:
+    """The shipped version must have its CHANGELOG entry."""
+    text = (ROOT / "CHANGELOG.md").read_text()
+    if f"## [{fields['version']}]" not in text:
+        errors.append(f"CHANGELOG has no ## [{fields['version']}] entry")
+
+
 def main() -> int:
     errors: list[str] = []
     fields = _load("extension-fields.json")
@@ -90,6 +136,8 @@ def main() -> int:
     check_fields(fields, errors)
     check_namespaces(namespaces, errors)
     check_reserved_namespace_is_ours(namespaces, errors)
+    check_compatibility(fields, namespaces, errors)
+    check_changelog_version(fields, errors)
 
     if fields["version"] != namespaces["version"]:
         errors.append(
