@@ -1,7 +1,7 @@
 {
   "$schema": "./extension-fields.schema.json",
-  "version": "1.1.0",
-  "updated": "2026-09-01",
+  "version": "1.2.0",
+  "updated": "2026-10-19",
   "registration_process": "https://github.com/jagmarques/asqav-registry/blob/main/REGISTRATION.md",
   "note": "Administered by Asqav, not IANA. RFC 8726 bars an Independent Submission from creating an IANA registry, so the defining document keeps these as normative tables and points here for administration. Transfer to IANA under Specification Required is expected if the document is progressed on the IETF Stream.",
   "registry": "Compliance Receipt Extension Fields",
@@ -380,6 +380,14 @@
       "scope": "signed-payload",
       "description": "Per-chain monotonic counter, an integer strictly greater than zero, starting at 1 on a chain's first receipt and incremented by exactly one per receipt, making a withheld or re-presented receipt arithmetically visible.",
       "reference": "draft-marques-asqav-compliance-receipts, seq",
+      "vocabulary": "free-form",
+      "change_controller": "This document"
+    },
+    {
+      "field_name": "invocation_ref",
+      "scope": "signed-payload",
+      "description": "Opaque producer-asserted identifier for one tool invocation. Never resolved or validated by the verifier; a matching invocation_ref across receipts is not evidence they describe the same Action (action_ref carries that binding). Normative profile definition pending; registered here so the emitted member resolves with stated semantics.",
+      "reference": "Emitted by the reference implementation; normative definition pending in draft-marques-asqav-compliance-receipts (result-bound).",
       "vocabulary": "free-form",
       "change_controller": "This document"
     }

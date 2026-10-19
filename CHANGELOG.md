@@ -2,6 +2,13 @@
 
 Both registries version together.
 
+## [1.2.0] - 2026-10-19
+
+- **48 extension fields** (was 47): registers `invocation_ref`, the opaque
+  producer-asserted tool-invocation identifier the reference implementation
+  emits. Normative profile definition pending; the entry states the
+  non-binding semantics so the emitted member resolves.
+
 ## [1.1.0] - 2026-09-01
 
 - **47 extension fields** (was 46): registers `seq`, the per-chain
