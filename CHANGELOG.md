@@ -2,6 +2,13 @@
 
 Both registries version together.
 
+## [1.3.0] - 2026-10-24
+
+- **49 extension fields** (was 48): registers `response_provenance`, the
+  Golden-Vector Provenance response hash (`responseHash` plus
+  `fixedPointVersion`), signed-payload, requested in issue #10. First
+  third-party entry; change controller is the GVP maintainer.
+
 ## [1.2.0] - 2026-10-19
 
 - **48 extension fields** (was 47): registers `invocation_ref`, the opaque
