@@ -44,6 +44,14 @@ export const SANDBOX_STATES = [
   "unavailable"
 ] as const;
 
+export const APPLIED_OUTCOMES = [
+  "success",
+  "fail",
+  "partial",
+  "cancelled",
+  "timed_out"
+] as const;
+
 export const WITNESSES = [
   "rfc3161",
   "opentimestamps"

@@ -11,8 +11,8 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 GROUPS = (
     "receipt_types", "request_extra_types", "decisions", "policy_decisions",
-    "capture_topologies", "sandbox_states", "witnesses", "standard_risk_classes",
-    "dora_incident_classes", "hipaa_incident_classes",
+    "capture_topologies", "sandbox_states", "applied_outcomes", "witnesses",
+    "standard_risk_classes", "dora_incident_classes", "hipaa_incident_classes",
 )
 ALIASES = {
     "PolicyDecision": "POLICY_DECISIONS",
