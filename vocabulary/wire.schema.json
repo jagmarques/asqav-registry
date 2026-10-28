@@ -6,7 +6,8 @@
   "required": [
     "schema_version", "source_note", "receipt_types", "request_extra_types",
     "decisions", "policy_decisions", "decision_map", "capture_topologies",
-    "sandbox_states", "witnesses", "taxonomy_order", "fields", "profiles",
+    "sandbox_states", "applied_outcomes", "witnesses", "taxonomy_order",
+    "fields", "profiles",
     "metadata_order", "metadata", "standard_risk_classes",
     "dora_incident_classes", "hipaa_incident_classes"
   ],
@@ -19,6 +20,7 @@
     "policy_decisions": {"$ref": "#/$defs/tokens"},
     "capture_topologies": {"$ref": "#/$defs/tokens"},
     "sandbox_states": {"$ref": "#/$defs/tokens"},
+    "applied_outcomes": {"$ref": "#/$defs/tokens"},
     "witnesses": {"$ref": "#/$defs/tokens"},
     "taxonomy_order": {"$ref": "#/$defs/tokens"},
     "metadata_order": {"$ref": "#/$defs/tokens"},
