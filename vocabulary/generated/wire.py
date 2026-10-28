@@ -26,6 +26,8 @@ CAPTURE_TOPOLOGIES = ('in_process_sdk',
 
 SANDBOX_STATES = ('enabled', 'disabled', 'unavailable')
 
+APPLIED_OUTCOMES = ('success', 'fail', 'partial', 'cancelled', 'timed_out')
+
 WITNESSES = ('rfc3161', 'opentimestamps')
 
 STANDARD_RISK_CLASSES = ('low', 'medium', 'high', 'unknown')

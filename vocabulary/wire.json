@@ -62,6 +62,13 @@
     "disabled",
     "unavailable"
   ],
+  "applied_outcomes": [
+    "success",
+    "fail",
+    "partial",
+    "cancelled",
+    "timed_out"
+  ],
   "witnesses": [
     "rfc3161",
     "opentimestamps"
