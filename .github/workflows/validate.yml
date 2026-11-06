@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, hz-ci-light]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
